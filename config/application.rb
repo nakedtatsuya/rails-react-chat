@@ -26,13 +26,13 @@ module RailsReactChatapp
         origins 'http://localhost:3000'
         resource '*',
                  :headers => :any,
-                 :methods => [:get, :post, :patch, :delete, :options]
+                 :methods => [:get, :post, :put, :patch, :delete, :options, :head],
+                 expose: ['accessToken', 'client', 'expiry', 'uid', 'tokenType']
       end
     end
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.

@@ -1,33 +1,35 @@
 class UsersController < ApplicationController
 
   def index
-    @user = User.all
-    render json: @user
-  end
-
-  def create
-    @user = User.new(user_params)
-    if @user.save
+    if current_user
+      exclusionList = [current_user.id]
+      current_user.friends.each {|user| exclusionList.push(user.id)}
+      exclusionList = exclusionList.join(',')
+      @user = User.where("name LIKE ? AND id NOT IN (" + exclusionList+ ")", "%"+params[:name]+"%")
       render json: @user
     else
-      render json: { status: 'ERROR', message: 'user not saved', data: @user.errors }
+      render status: 500, json: { status: 500, message: 'Not login. Access denied. Permission error' }
     end
   end
 
-  def update
-    @user = User.find(params[:id])
-    @user.update_attributes(product: params[:product])
-    render json: @user
-  end
-
-  def destroy
-    @user = User.find(params[:id])
-    if @user.destroy
-      head :no_content, status: :ok
+  def show
+    if current_user
+      @user = User.find(params[:id])
+      render json: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render status: 500, json: { status: 500, message: 'Not login. Access denied. Permission error' }
     end
   end
+
+  def friend
+    if current_user
+      @users = current_user.friends
+      render json: @users
+    else
+      render status: 500, json: { status: 500, message: 'Not login. Access denied. Permission error' }
+    end
+  end
+
 
   private
 

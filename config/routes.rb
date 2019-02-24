@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => {sessions: 'sessions', registrations: 'registrations'}, format: 'json'
-  root to: "users#index"
-  resources :users, only: [:index, :create, :destroy], format: 'json'
-  post '/users/login', to: 'users#login', format: 'json'
+
+  mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+      registrations: 'auth/registrations'
+  }
+  get '/users/friends', to: 'users#friend', format: 'json'
+  resources :users, only: [:index, :show], format: 'json'
+  resources :friendships, only: [:create, :destroy], format: 'json'
+  resources :messages, only: [:create], format: 'json'
+  get '/messages/:id', to: 'messages#index', format: 'json'
 end
