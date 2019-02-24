@@ -49,6 +49,6 @@ test:
 #
 production:
   <<: *default
-  database: rails-react-chatapp_production
-  username: rails-react-chatapp
-  password: <%= ENV['RAILS-REACT-CHATAPP_DATABASE_PASSWORD'] %>
+  database: <%= ENV['DB_NAME'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
