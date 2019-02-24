@@ -31,10 +31,6 @@ class User < ApplicationRecord
     self.friendships_of_to_user.find_by(from_user_id: other_user.id).destroy
   end
 
-  # 現在のユーザーがフォローしてたらtrueを返す
-  def following?(other_user)
-    self.friends_of_from_user.include?(other_user) || self.friends_of_to_user.include?(other_user)
-  end
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
