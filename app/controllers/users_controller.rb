@@ -13,23 +13,23 @@ class UsersController < ApplicationController
   end
 
   def show
-    if current_user
       @user = User.find(params[:id])
       render json: @user
-    else
-      render status: 500, json: { status: 500, message: 'Not login. Access denied. Permission error' }
-    end
   end
 
   def friend
-    if current_user
-      @users = current_user.friends
+      id = current_user.id.to_s
+      @users = User.find_by_sql('SELECT u.name,u.email,u.image,u.id,(select is_read from messages WHERE to_id='+id+' AND from_id=u.id ORDER BY created_at desc limit 1) as isRead FROM users u INNER JOIN friendships f ON u.id=f.to_user_id WHERE f.from_user_id='+id+'')
       render json: @users
-    else
-      render status: 500, json: { status: 500, message: 'Not login. Access denied. Permission error' }
-    end
   end
 
+  def image
+    if current_user.update_attributes(image: params[:image])
+      render json: current_user
+    else
+      render status: 500
+    end
+  end
 
   private
 

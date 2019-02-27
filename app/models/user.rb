@@ -7,15 +7,17 @@ class User < ApplicationRecord
   has_many :friends_of_to_user, :through => :friendships_of_to_user, :source => 'from_user'
   has_many :from_messages, :class_name => 'Message', :foreign_key => 'from_id', :dependent => :destroy
   has_many :to_messages, :class_name => 'Message', :foreign_key => 'to_id', :dependent => :destroy
+  mount_uploader :image, ImageUploader
 
   def friends
     self.friends_of_from_user
   end
 
+  #current_userが送るメッセージ
   def from_message(to_id)
     self.from_messages.where(to_id: to_id)
   end
-
+  #current_userが受け取るメッセージ
   def to_message(from_id)
     self.to_messages.where(from_id: from_id)
   end

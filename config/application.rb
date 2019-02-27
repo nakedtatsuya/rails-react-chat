@@ -20,10 +20,11 @@ module RailsReactChatapp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
+    config.autoload_paths += Dir[Rails.root.join('app', 'uploaders')]
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins ENV['ACCESS_ORIGIN']
+        origins ENV['ACCESS_ORIGIN'].to_s
         resource '*',
                  :headers => :any,
                  :methods => [:get, :post, :put, :patch, :delete, :options, :head],

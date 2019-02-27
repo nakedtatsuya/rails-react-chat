@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190224171030) do
+ActiveRecord::Schema.define(version: 20190227071230) do
 
   create_table "friendships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci" do |t|
     t.integer "from_user_id"
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(version: 20190224171030) do
     t.integer "to_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image"
+    t.boolean "is_read", default: false
     t.index ["from_id", "to_id"], name: "index_messages_on_from_id_and_to_id"
   end
 
@@ -49,6 +51,7 @@ ActiveRecord::Schema.define(version: 20190224171030) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "allow_password_change", default: false, null: false
+    t.string "image"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true

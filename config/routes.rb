@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
       registrations: 'auth/registrations'
   }
@@ -8,4 +7,6 @@ Rails.application.routes.draw do
   resources :friendships, only: [:create, :destroy], format: 'json'
   resources :messages, only: [:create], format: 'json'
   get '/messages/:id', to: 'messages#index', format: 'json'
+  post '/messages/image/:to_id', to: 'messages#image', format: 'json'
+  post '/users/image', to: 'users#image', format: 'json'
 end
