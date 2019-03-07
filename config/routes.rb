@@ -8,5 +8,5 @@ Rails.application.routes.draw do
   resources :messages, only: [:create], format: 'json'
   get '/messages/:id', to: 'messages#index', format: 'json'
   post '/messages/image/:to_id', to: 'messages#image', format: 'json'
-  post '/users/image', to: 'users#image', format: 'json'
+  put '/users/image', to: 'users#image', format: 'json'
 end

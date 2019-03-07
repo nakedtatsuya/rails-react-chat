@@ -7,7 +7,7 @@ module Auth
     end
 
     def account_update_params
-      params.permit(:name, :email)
+      params.permit(:name, :email, :image)
     end
 
   end

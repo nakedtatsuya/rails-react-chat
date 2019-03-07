@@ -8,18 +8,23 @@ class User < ApplicationRecord
   has_many :from_messages, :class_name => 'Message', :foreign_key => 'from_id', :dependent => :destroy
   has_many :to_messages, :class_name => 'Message', :foreign_key => 'to_id', :dependent => :destroy
   mount_uploader :image, ImageUploader
+  validates :email, presence: true, length: { maximum: 255 }, uniqueness: true
 
   def friends
-    self.friends_of_from_user
+    self.friends_of_from_user.select("users.id, users.name, users.image, is_read as isRead").joins('LEFT JOIN messages m on m.to_id=15 AND m.from_id=users.id AND m.is_read=false').group('users.id')
   end
 
-  #current_userが送るメッセージ
+  #selfが送るメッセージ
   def from_message(to_id)
     self.from_messages.where(to_id: to_id)
   end
-  #current_userが受け取るメッセージ
+  #selfが受け取るメッセージ
   def to_message(from_id)
     self.to_messages.where(from_id: from_id)
+  end
+
+  def chat_list(id)
+    self.from_messages.where(to_id: id).or(self.to_messages.where(from_id: id)).order("created_at")
   end
 
   def follow(other_user)
@@ -31,6 +36,10 @@ class User < ApplicationRecord
   def unfollow(other_user)
     self.friendships_of_from_user.find_by(to_user_id: other_user.id).destroy
     self.friendships_of_to_user.find_by(from_user_id: other_user.id).destroy
+  end
+
+  def attributes_with_virtual(is_read)
+    attributes.merge("isRead" => is_read)
   end
 
   # Include default devise modules. Others available are:

@@ -1,9 +1,7 @@
 class MessagesController < ApplicationController
 
   def index
-      messages = Message.where(
-          '(from_id='+current_user.id.to_s+' AND to_id='+params[:id].to_s+') OR (to_id='+current_user.id.to_s+' AND from_id='+params[:id].to_s+')'
-      ).order("created_at")
+      messages = current_user.chat_list(params[:id])
       messages.where(to_id: current_user.id).update_all(is_read: true)
       render json: messages
   end
